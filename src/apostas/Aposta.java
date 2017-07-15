@@ -1,4 +1,4 @@
-package lab4;
+package apostas;
 
 /**
  * Representa uma aposta, uma aposta tem um nome de um apostador, um valor e uma

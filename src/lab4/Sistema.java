@@ -2,6 +2,9 @@ package lab4;
 
 import java.util.HashMap;
 
+import cenarios.Cenario;
+import cenarios.CenarioBonus;
+
 /**
  * Representa a classe sistema, que controla praticamente a maior parte da
  * lógica das apostas. Um sistema tem um caixa, uma taxa e uma lista de

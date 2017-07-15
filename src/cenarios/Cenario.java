@@ -1,6 +1,8 @@
-package lab4;
+package cenarios;
 
 import java.util.ArrayList;
+
+import apostas.Aposta;
 
 /**
  * Essa classe representa um cenário. Um cenário pode ou não acontecer, ele tem
