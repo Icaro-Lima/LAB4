@@ -19,10 +19,10 @@ public class Cenario {
     private String descricao;
     private String estado;
 
-    protected ArrayList<Aposta> apostas;
+    private ArrayList<Aposta> apostas;
 
-    protected int caixaCenario;
-    protected int totalRateioCenario;
+    private int caixaCenario;
+    private int totalRateioCenario;
 
     /**
      * Instancia um novo cenário, um cenário tem uma descrição, um estado e uma
