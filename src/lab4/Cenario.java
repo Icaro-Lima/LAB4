@@ -19,8 +19,8 @@ public class Cenario {
 
 	protected ArrayList<Aposta> apostas;
 
-	private int caixaCenario;
-	private int totalRateioCenario;
+	protected int caixaCenario;
+	protected int totalRateioCenario;
 
 	/**
 	 * Instancia um novo cenário, um cenário tem uma descrição, um estado e uma

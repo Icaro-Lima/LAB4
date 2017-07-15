@@ -75,11 +75,15 @@ public class Sistema {
 		if (descricao.trim().isEmpty()) {
 			throw new IllegalArgumentException(
 					"Erro no cadastro de cenario: Descricao nao pode ser vazia");
+		} else if (bonus <= 0) {
+		    throw new IllegalArgumentException("Erro no cadastro de cenario: Bonus invalido");
 		}
 
 		CenarioBonus cenarioBonus = new CenarioBonus(descricao, bonus);
 
 		this.cenarios.put(this.cenarios.size() + 1, cenarioBonus);
+		
+		this.caixa -= bonus;
 
 		return this.cenarios.size();
 	}

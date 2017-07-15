@@ -17,11 +17,14 @@ public class CenarioBonus extends Cenario {
 	}
 
 	public String toString() {
-		return super.toString() + " - R$" + String.format("%.2f", this.bonus / 100.0);
+		return super.toString() + " - R$ " + String.format("%.2f", this.bonus / 100.0);
 	}
 	
-	public void getBonus(int bonus) {
-		this.bonus = bonus;
+	public int getBonus() {
+	    return this.bonus;
 	}
 	
+	public int getTotalRateioCenario() {
+	    return super.getTotalRateioCenario() + this.getBonus();
+	}
 }
