@@ -3,6 +3,8 @@ package cenarios;
 import java.util.ArrayList;
 
 import apostas.Aposta;
+import apostas.ApostaSeguroTaxa;
+import apostas.ApostaSeguroValor;
 
 /**
  * Essa classe representa um cenário. Um cenário pode ou não acontecer, ele tem
@@ -64,6 +66,17 @@ public class Cenario {
     public void cadastraAposta(String apostador, int valor, String previsao) {
 	Aposta aposta = new Aposta(apostador, valor, previsao);
 	this.apostas.add(aposta);
+    }
+    
+    public int cadastrarApostaSeguraValor(String apostador, int valor, String previsao, int valorSeguro) {
+	ApostaSeguroValor apostaSeguroValor = new ApostaSeguroValor(apostador, valor, previsao, valorSeguro);
+	this.apostas.add(apostaSeguroValor);
+	
+	return this.apostas.size() - 1;
+    }
+    
+    public int cadastrarApostaSeguraTaxa(String apostador, int valor, String previsao, double taxaSeguro) {
+	ApostaSeguroTaxa apostaSeguroTaxa = new 
     }
 
     /**
