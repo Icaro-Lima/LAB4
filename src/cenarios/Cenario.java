@@ -76,7 +76,10 @@ public class Cenario {
     }
     
     public int cadastrarApostaSeguraTaxa(String apostador, int valor, String previsao, double taxaSeguro) {
-	ApostaSeguroTaxa apostaSeguroTaxa = new 
+	ApostaSeguroTaxa apostaSeguroTaxa = new ApostaSeguroTaxa(apostador, valor, previsao, taxaSeguro);
+	this.apostas.add(apostaSeguroTaxa);
+	
+	return this.apostas.size() - 1;
     }
 
     /**
