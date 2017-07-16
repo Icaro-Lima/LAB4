@@ -25,6 +25,7 @@ public class Cenario {
 
     private int caixaCenario;
     private int totalRateioCenario;
+    private int totalValorAssegurado;
 
     /**
      * Instancia um novo cenário, um cenário tem uma descrição, um estado e uma
@@ -67,19 +68,53 @@ public class Cenario {
 	Aposta aposta = new Aposta(apostador, valor, previsao);
 	this.apostas.add(aposta);
     }
-    
+
     public int cadastrarApostaSeguraValor(String apostador, int valor, String previsao, int valorSeguro) {
 	ApostaSeguroValor apostaSeguroValor = new ApostaSeguroValor(apostador, valor, previsao, valorSeguro);
 	this.apostas.add(apostaSeguroValor);
-	
+
 	return this.apostas.size() - 1;
     }
-    
+
     public int cadastrarApostaSeguraTaxa(String apostador, int valor, String previsao, double taxaSeguro) {
 	ApostaSeguroTaxa apostaSeguroTaxa = new ApostaSeguroTaxa(apostador, valor, previsao, taxaSeguro);
 	this.apostas.add(apostaSeguroTaxa);
-	
+
 	return this.apostas.size() - 1;
+    }
+
+    /**
+     * Converte uma aposta assegurada por taxa em aposta assegurada por valor.
+     * 
+     * @param apostaAsseguradaID
+     *            O identificador da aposta.
+     * @param taxaSeguro
+     *            O valor de seguro da aposta.
+     */
+    public void alterarSeguroValor(int apostaAsseguradaID, int valorSeguro) {
+	Aposta aposta = this.apostas.get(apostaAsseguradaID);
+	ApostaSeguroValor apostaSeguroValor = new ApostaSeguroValor(aposta.getNomeApostador(), aposta.getValorAposta(),
+		aposta.getPrevisao(), valorSeguro);
+
+	this.apostas.add(apostaAsseguradaID, apostaSeguroValor);
+	this.apostas.remove(apostaAsseguradaID + 1);
+    }
+
+    /**
+     * Converte uma aposta assegurada por valor em aposta assegurada por taxa.
+     * 
+     * @param apostaAsseguradaID
+     *            O identificador da aposta.
+     * @param taxaSeguro
+     *            A taxa de seguro da aposta.
+     */
+    public void alterarSeguroTaxa(int apostaAsseguradaID, double taxaSeguro) {
+	Aposta aposta = this.apostas.get(apostaAsseguradaID);
+	ApostaSeguroTaxa apostaSeguroTaxa = new ApostaSeguroTaxa(aposta.getNomeApostador(), aposta.getValorAposta(),
+		aposta.getPrevisao(), taxaSeguro);
+
+	this.apostas.add(apostaAsseguradaID, apostaSeguroTaxa);
+	this.apostas.remove(apostaAsseguradaID + 1);
     }
 
     /**
@@ -150,26 +185,30 @@ public class Cenario {
 	for (int i = 0; i < this.apostas.size(); i++) {
 	    Aposta aposta = this.apostas.get(i);
 
-	    if (aposta.getPrevisao().equals("VAI ACONTECER")) {
-		if (!ocorreu) {
-		    sum += aposta.getValorAposta();
-		} else {
-		    alguemVenceu = true;
+	    if ((aposta.getPrevisao().equals("VAI ACONTECER") && !ocorreu)
+		    || (aposta.getPrevisao().equals("N VAI ACONTECER") && ocorreu)) {
+		if (aposta instanceof ApostaSeguroValor) {
+		    ApostaSeguroValor apostaSeguroValor = (ApostaSeguroValor) aposta;
+
+		    setTotalValorAssegurado(getTotalValorAssegurado() + apostaSeguroValor.getValorSeguro());
+		} else if (aposta instanceof ApostaSeguroTaxa) {
+		    ApostaSeguroTaxa apostaSeguroTaxa = (ApostaSeguroTaxa) aposta;
+
+		    setTotalValorAssegurado((int) (getTotalValorAssegurado()
+			    + apostaSeguroTaxa.getTaxaSeguro() * apostaSeguroTaxa.getValorAposta()));
 		}
+
+		sum += aposta.getValorAposta();
 	    } else {
-		if (ocorreu) {
-		    sum += aposta.getValorAposta();
-		} else {
-		    alguemVenceu = true;
-		}
+		alguemVenceu = true;
 	    }
 	}
 
 	int rateioBase = (int) Math.ceil(sum * (1 - taxa));
-	
+
 	if (alguemVenceu) {
 	    this.setCaixaCenario(sum - rateioBase);
-	    
+
 	    this.setTotalRateioCenario(rateioBase);
 	} else {
 	    this.setTotalRateioCenario(0);
@@ -206,6 +245,14 @@ public class Cenario {
 
     public String getEstado() {
 	return this.estado;
+    }
+
+    public int getTotalValorAssegurado() {
+	return totalValorAssegurado;
+    }
+
+    private void setTotalValorAssegurado(int totalValorAssegurado) {
+	this.totalValorAssegurado = totalValorAssegurado;
     }
 
 }

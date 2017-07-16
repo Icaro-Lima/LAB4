@@ -170,14 +170,28 @@ public class Sistema {
 
     public int cadastrarApostaSeguraValor(int cenarioID, String apostador, int valor, String previsao, int valorSeguro,
 	    int custoSeguro) {
+	this.caixa += custoSeguro;
+	
 	Cenario cenario = this.cenarios.get(cenarioID);
 	return cenario.cadastrarApostaSeguraValor(apostador, valor, previsao, valorSeguro);
     }
-    
+
     public int cadastrarApostaSeguraTaxa(int cenarioID, String apostador, int valor, String previsao, double taxaSeguro,
 	    int custoSeguro) {
+	this.caixa += custoSeguro;
+	
 	Cenario cenario = this.cenarios.get(cenarioID);
 	return cenario.cadastrarApostaSeguraTaxa(apostador, valor, previsao, taxaSeguro);
+    }
+
+    public void alterarSeguroValor(int cenarioID, int apostaAssegurada, int seguroValor) {
+	Cenario cenario = this.cenarios.get(cenarioID);
+	cenario.alterarSeguroValor(apostaAssegurada, seguroValor);
+    }
+    
+    public void alterarSeguroTaxa(int cenarioID, int apostaAssegurada, double seguroTaxa) {
+	Cenario cenario = this.cenarios.get(cenarioID);
+	cenario.alterarSeguroTaxa(apostaAssegurada, seguroTaxa);
     }
 
     /**
@@ -249,6 +263,7 @@ public class Sistema {
 	cenario.fecharAposta(ocorreu, taxa);
 
 	this.caixa += cenario.getCaixaCenario();
+	this.caixa -= cenario.getTotalValorAssegurado();
     }
 
     /**
@@ -306,5 +321,5 @@ public class Sistema {
     public String getEstadoCenario(int cenarioID) {
 	return this.cenarios.get(cenarioID).getEstado();
     }
-    
+
 }

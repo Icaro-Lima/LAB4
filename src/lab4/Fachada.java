@@ -65,6 +65,14 @@ public class Fachada {
     public int cadastrarApostaSeguraTaxa(int cenarioID, String apostador, int valor, String previsao, double taxaSeguro, int custoSeguro) {
 	return this.sistema.cadastrarApostaSeguraTaxa(cenarioID, apostador, valor, previsao, taxaSeguro, custoSeguro);
     }
+    
+    public void alterarSeguroValor(int cenarioID, int apostaAssegurada, int seguroValor) {
+	this.sistema.alterarSeguroValor(cenarioID, apostaAssegurada, seguroValor);
+    }
+    
+    public void alterarSeguroTaxa(int cenarioID, int apostaAssegurada, double seguroTaxa) {
+	this.sistema.alterarSeguroTaxa(cenarioID, apostaAssegurada, seguroTaxa);
+    }
 
     /**
      * {@link Sistema#valorTotalDeApostas(int)}
