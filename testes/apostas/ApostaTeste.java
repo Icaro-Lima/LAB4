@@ -25,8 +25,62 @@ public class ApostaTeste {
 		Aposta aposta0 = new Aposta("Ícaro Lima", 10, "N VAI ACONTECER");
 		assertEquals("Ícaro Lima - R$0,10 - N VAI ACONTECER", aposta0.toString());
 
-		Aposta aposta1 = new Aposta("Ícaro Lima", 0, "VAI ACONTECER");
-		assertEquals("Ícaro Lima - R$0,00 - VAI ACONTECER", aposta1.toString());
+		Aposta aposta1 = new Aposta("Ícaro Lima", 1, "VAI ACONTECER");
+		assertEquals("Ícaro Lima - R$0,01 - VAI ACONTECER", aposta1.toString());
+	}
+	
+	@Test
+	public void testApostaSeguro() {
+		@SuppressWarnings("unused")
+		Aposta aposta = new Aposta("Ícaro", 1, "VAI ACONTECER");
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testApostaSeguroNomeApostadorVazio0() {
+		@SuppressWarnings("unused")
+		Aposta aposta = new Aposta(null, 1, "VAI ACONTECER");
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testApostaSeguroNomeApostadorVazio1() {
+		@SuppressWarnings("unused")
+		Aposta aposta = new Aposta("", 1, "VAI ACONTECER");
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testApostaSeguroNomeApostadorVazio2() {
+		@SuppressWarnings("unused")
+		Aposta aposta = new Aposta("    ", 1, "VAI ACONTECER");
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testApostaMenorIgualZero0() {
+		@SuppressWarnings("unused")
+		Aposta aposta = new Aposta("Ícaro", 0, "VAI ACONTECER");
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testApostaMenorIgualZero1() {
+		@SuppressWarnings("unused")
+		Aposta aposta = new Aposta("Ícaro", -1, "VAI ACONTECER");
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testApostaDescricaoVazia0() {
+		@SuppressWarnings("unused")
+		Aposta aposta = new Aposta("Ícaro", -1, null);
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testApostaDescricaoVazia1() {
+		@SuppressWarnings("unused")
+		Aposta aposta = new Aposta("Ícaro", -1, "");
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testApostaDescricaoVazia2() {
+		@SuppressWarnings("unused")
+		Aposta aposta = new Aposta("Ícaro", -1, "  ");
 	}
 
 }
