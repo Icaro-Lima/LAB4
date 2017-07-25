@@ -4,10 +4,16 @@ public class ApostaAssegurada extends Aposta {
 
 	private Seguro seguro;
 	
-	public ApostaAssegurada(String nomeApostador, int valorAposta, String previsao, String tipo) {
+	public ApostaAssegurada(String nomeApostador, int valorAposta, String previsao, int valor) {
 		super(nomeApostador, valorAposta, previsao);
 
-		validar(tipo);
+		validar("valor");
+	}
+	
+	public ApostaAssegurada(String nomeApostador, int valorAposta, String previsao, double taxa) {
+		super(nomeApostador, valorAposta, previsao);
+
+		validar("taxa");
 	}
 
 	public void validar(String tipo) {
