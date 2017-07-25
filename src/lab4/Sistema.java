@@ -344,6 +344,14 @@ public class Sistema {
 		this.caixa += cenario.getCaixaCenario();
 		this.caixa -= cenario.getTotalValorAssegurado();
 	}
+	
+	public void alterarOrdem(String ordem) {
+		this.cenarios.alterarOrdem(ordem);
+	}
+	
+	String exibirCenarioOrdenado(int cenario) {
+		return this.cenarios.get(cenario).exibirCenarioOrdenado();
+	}
 
 	/**
 	 * Retorna o caixa de um determinado cenário.

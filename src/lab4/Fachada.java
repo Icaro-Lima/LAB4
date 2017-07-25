@@ -101,6 +101,13 @@ public class Fachada {
     public void fecharAposta(int cenarioID, boolean ocorreu) {
 	this.sistema.fecharAposta(cenarioID, ocorreu);
     }
+    
+    /**
+     * {@link Sistema#alterarOrdem(String)}
+     */
+    void alterarOrdem(String ordem) {
+    	this.sistema.alterarOrdem(ordem);
+    }
 
     /**
      * {@link Sistema#getCaixaCenario(int)}
