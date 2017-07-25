@@ -2,7 +2,7 @@ package apostas;
 
 public class ApostaAssegurada extends Aposta {
 
-	
+	private Seguro seguro;
 	
 	public ApostaAssegurada(String nomeApostador, int valorAposta, String previsao, String tipo) {
 		super(nomeApostador, valorAposta, previsao);
