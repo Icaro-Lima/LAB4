@@ -3,8 +3,7 @@ package cenarios;
 import java.util.ArrayList;
 
 import apostas.Aposta;
-import apostas.ApostaSeguroTaxa;
-import apostas.ApostaSeguroValor;
+import apostas.ApostaAssegurada;
 
 /**
  * Essa classe representa um cenário. Um cenário pode ou não acontecer, ele tem
@@ -17,7 +16,7 @@ import apostas.ApostaSeguroValor;
 public class Cenario {
 
 	private final String LINE_SEPARATOR = System.lineSeparator();
-	
+
 	private String descricao;
 	private String estado;
 
@@ -34,7 +33,7 @@ public class Cenario {
 	 * @param descricao
 	 *            A descrição do cenário.
 	 */
-	public Cenario(String descricao) {		
+	public Cenario(String descricao) {
 		this.descricao = descricao;
 		this.estado = "Nao finalizado";
 
@@ -85,8 +84,8 @@ public class Cenario {
 	 *            apostador caso ele perca.
 	 */
 	public int cadastrarApostaSeguraValor(String apostador, int valor, String previsao, int valorSeguro) {
-		ApostaSeguroValor apostaSeguroValor = new ApostaSeguroValor(apostador, valor, previsao, valorSeguro);
-		this.apostas.add(apostaSeguroValor);
+		ApostaAssegurada apostaAssegurada = new ApostaAssegurada(apostador, valor, previsao, valorSeguro);
+		this.apostas.add(apostaAssegurada);
 
 		return this.apostas.size() - 1;
 	}
@@ -108,8 +107,8 @@ public class Cenario {
 	 *            caixa do sistema e será dado ao apostador caso ele perca.
 	 */
 	public int cadastrarApostaSeguraTaxa(String apostador, int valor, String previsao, double taxaSeguro) {
-		ApostaSeguroTaxa apostaSeguroTaxa = new ApostaSeguroTaxa(apostador, valor, previsao, taxaSeguro);
-		this.apostas.add(apostaSeguroTaxa);
+		ApostaAssegurada apostAssegurada = new ApostaAssegurada(apostador, valor, previsao, taxaSeguro);
+		this.apostas.add(apostAssegurada);
 
 		return this.apostas.size() - 1;
 	}
@@ -123,12 +122,8 @@ public class Cenario {
 	 *            O valor de seguro da aposta.
 	 */
 	public void alterarSeguroValor(int apostaAsseguradaID, int valorSeguro) {
-		Aposta aposta = this.apostas.get(apostaAsseguradaID);
-		ApostaSeguroValor apostaSeguroValor = new ApostaSeguroValor(aposta.getNomeApostador(), aposta.getValorAposta(),
-				aposta.getPrevisao(), valorSeguro);
-
-		this.apostas.add(apostaAsseguradaID, apostaSeguroValor);
-		this.apostas.remove(apostaAsseguradaID + 1);
+		ApostaAssegurada apostaAssegurada = (ApostaAssegurada) this.apostas.get(apostaAsseguradaID);
+		apostaAssegurada.alterarSeguroValor(valorSeguro);
 	}
 
 	/**
@@ -140,12 +135,8 @@ public class Cenario {
 	 *            A taxa de seguro da aposta.
 	 */
 	public void alterarSeguroTaxa(int apostaAsseguradaID, double taxaSeguro) {
-		Aposta aposta = this.apostas.get(apostaAsseguradaID);
-		ApostaSeguroTaxa apostaSeguroTaxa = new ApostaSeguroTaxa(aposta.getNomeApostador(), aposta.getValorAposta(),
-				aposta.getPrevisao(), taxaSeguro);
-
-		this.apostas.add(apostaAsseguradaID, apostaSeguroTaxa);
-		this.apostas.remove(apostaAsseguradaID + 1);
+		ApostaAssegurada apostaAssegurada = (ApostaAssegurada) this.apostas.get(apostaAsseguradaID);
+		apostaAssegurada.alterarSeguroTaxa(taxaSeguro);
 	}
 
 	/**
@@ -233,16 +224,8 @@ public class Cenario {
 			Aposta aposta = this.apostas.get(i);
 
 			if (this.isPerdedor(aposta, ocorreu)) {
-				if (aposta instanceof ApostaSeguroValor) {
-					ApostaSeguroValor apostaSeguroValor = (ApostaSeguroValor) aposta;
-
-					setTotalValorAssegurado(getTotalValorAssegurado() + apostaSeguroValor.getValorSeguro());
-				} else if (aposta instanceof ApostaSeguroTaxa) {
-					ApostaSeguroTaxa apostaSeguroTaxa = (ApostaSeguroTaxa) aposta;
-
-					setTotalValorAssegurado((int) (getTotalValorAssegurado()
-							+ apostaSeguroTaxa.getTaxaSeguro() * apostaSeguroTaxa.getValorAposta()));
-				}
+				ApostaAssegurada apostaAssegurada = (ApostaAssegurada)aposta;
+				setTotalValorAssegurado(getTotalValorAssegurado() + apostaAssegurada.getValorSeguro());
 
 				sum += aposta.getValorAposta();
 			} else {
