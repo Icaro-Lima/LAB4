@@ -37,20 +37,6 @@ public class Aposta {
 		this.nomeApostador = nomeApostador;
 		this.valorAposta = valorAposta;
 		this.previsao = previsao;
-		
-		this.validar();
-	}
-	
-	public void validar() {
-		if (this.nomeApostador == null || this.nomeApostador.trim().isEmpty()) {
-			throw new IllegalArgumentException("Erro no cadastro de aposta: Apostador nao pode ser vazio ou nulo");
-		} else if (this.valorAposta <= 0) {
-			throw new IllegalArgumentException("Erro no cadastro de aposta: Valor nao pode ser menor ou igual a zero");
-		} else if (this.previsao == null || this.previsao.trim().isEmpty()) {
-			throw new IllegalArgumentException("Erro no cadastro de aposta: Previsao nao pode ser vazia ou nula");
-		} else if (!(this.previsao.equals("VAI ACONTECER") || this.previsao.equals("N VAI ACONTECER"))) {
-			throw new IllegalArgumentException("Erro no cadastro de aposta: Previsao invalida");
-		}
 	}
 
 	/**

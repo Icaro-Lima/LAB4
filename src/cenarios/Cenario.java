@@ -64,6 +64,16 @@ public class Cenario {
 	 *            ACONTECER".
 	 */
 	public void cadastraAposta(String apostador, int valor, String previsao) {
+		if (apostador == null || apostador.trim().isEmpty()) {
+			throw new IllegalArgumentException("Erro no cadastro de aposta: Apostador nao pode ser vazio ou nulo");
+		} else if (valor <= 0) {
+			throw new IllegalArgumentException("Erro no cadastro de aposta: Valor nao pode ser menor ou igual a zero");
+		} else if (previsao == null || previsao.trim().isEmpty()) {
+			throw new IllegalArgumentException("Erro no cadastro de aposta: Previsao nao pode ser vazia ou nula");
+		} else if (!(previsao.equals("VAI ACONTECER") || previsao.equals("N VAI ACONTECER"))) {
+			throw new IllegalArgumentException("Erro no cadastro de aposta: Previsao invalida");
+		}
+		
 		Aposta aposta = new Aposta(apostador, valor, previsao);
 		this.apostas.add(aposta);
 	}
@@ -84,6 +94,20 @@ public class Cenario {
 	 *            apostador caso ele perca.
 	 */
 	public int cadastrarApostaSeguraValor(String apostador, int valor, String previsao, int valorSeguro) {
+		if (apostador == null || apostador.trim().isEmpty()) {
+			throw new IllegalArgumentException(
+					"Erro no cadastro de aposta assegurada por valor: Apostador nao pode ser vazio ou nulo");
+		} else if (valor <= 0) {
+			throw new IllegalArgumentException(
+					"Erro no cadastro de aposta assegurada por valor: Valor nao pode ser menor ou igual a zero");
+		} else if (previsao == null || previsao.trim().isEmpty()) {
+			throw new IllegalArgumentException(
+					"Erro no cadastro de aposta assegurada por valor: Previsao nao pode ser vazia ou nula");
+		} else if (!(previsao.equals("VAI ACONTECER") || previsao.equals("N VAI ACONTECER"))) {
+			throw new IllegalArgumentException(
+					"Erro no cadastro de aposta assegurada por valor: Previsao invalida");
+		}
+		
 		ApostaAssegurada apostaAssegurada = new ApostaAssegurada(apostador, valor, previsao, valorSeguro);
 		this.apostas.add(apostaAssegurada);
 
@@ -107,6 +131,20 @@ public class Cenario {
 	 *            caixa do sistema e será dado ao apostador caso ele perca.
 	 */
 	public int cadastrarApostaSeguraTaxa(String apostador, int valor, String previsao, double taxaSeguro) {
+		if (apostador == null || apostador.trim().isEmpty()) {
+			throw new IllegalArgumentException(
+					"Erro no cadastro de aposta assegurada por taxa: Apostador nao pode ser vazio ou nulo");
+		} else if (valor <= 0) {
+			throw new IllegalArgumentException(
+					"Erro no cadastro de aposta assegurada por taxa: Valor nao pode ser menor ou igual a zero");
+		} else if (previsao == null || previsao.trim().isEmpty()) {
+			throw new IllegalArgumentException(
+					"Erro no cadastro de aposta assegurada por taxa: Previsao nao pode ser vazia ou nula");
+		} else if (!(previsao.equals("VAI ACONTECER") || previsao.equals("N VAI ACONTECER"))) {
+			throw new IllegalArgumentException(
+					"Erro no cadastro de aposta assegurada por taxa: Previsao invalida");
+		}
+		
 		ApostaAssegurada apostAssegurada = new ApostaAssegurada(apostador, valor, previsao, taxaSeguro);
 		this.apostas.add(apostAssegurada);
 
@@ -224,8 +262,10 @@ public class Cenario {
 			Aposta aposta = this.apostas.get(i);
 
 			if (this.isPerdedor(aposta, ocorreu)) {
-				ApostaAssegurada apostaAssegurada = (ApostaAssegurada)aposta;
-				setTotalValorAssegurado(getTotalValorAssegurado() + apostaAssegurada.getValorSeguro());
+				if (aposta instanceof ApostaAssegurada) {
+					ApostaAssegurada apostaAssegurada = (ApostaAssegurada) aposta;
+					setTotalValorAssegurado(getTotalValorAssegurado() + apostaAssegurada.getValorSeguro());
+				}
 
 				sum += aposta.getValorAposta();
 			} else {
