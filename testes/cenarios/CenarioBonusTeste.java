@@ -14,7 +14,7 @@ public class CenarioBonusTeste {
 	 */
 	@Before
 	public void Inicializa() {
-		this.cenarioBonus = new CenarioBonus("Ícaro vai tirar 10,0 nesse lab.", 1000);
+		this.cenarioBonus = new CenarioBonus("Ícaro vai tirar 10,0 nesse lab.", 1, 1000);
 	}
 
 	/**

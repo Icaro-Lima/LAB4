@@ -14,7 +14,7 @@ public class CenarioTeste {
 	 */
 	@Before
 	public void initializar() {
-		this.cenario = new Cenario("Ícaro vai tirar 10,0 nesse lab.");
+		this.cenario = new Cenario("Ícaro vai tirar 10,0 nesse lab.", 1);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class CenarioTeste {
 		assertEquals(0, this.cenario.getCaixaCenario());
 		assertEquals(0, this.cenario.getTotalRateioCenario());
 
-		this.cenario = new Cenario("Ícaro vai tirar 10,0 nesse lab.");
+		this.cenario = new Cenario("Ícaro vai tirar 10,0 nesse lab.", 2);
 		this.cenario.cadastraAposta("Ícaro Dantas", 10000, "VAI ACONTECER");
 		this.cenario.cadastraAposta("Monitor Mafra", 99999999, "N VAI ACONTECER");
 
