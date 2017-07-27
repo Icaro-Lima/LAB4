@@ -25,6 +25,8 @@ public class Cenario {
 	private int caixaCenario;
 	private int totalRateioCenario;
 	private int totalValorAssegurado;
+	
+	private int cadastroID;
 
 	/**
 	 * Instancia um novo cenário, um cenário tem uma descrição, um estado e uma
@@ -33,7 +35,7 @@ public class Cenario {
 	 * @param descricao
 	 *            A descrição do cenário.
 	 */
-	public Cenario(String descricao) {
+	public Cenario(String descricao, int cadastroID) {
 		this.descricao = descricao;
 		this.estado = "Nao finalizado";
 
@@ -41,6 +43,8 @@ public class Cenario {
 
 		this.caixaCenario = 0;
 		this.totalRateioCenario = 0;
+		
+		this.cadastroID = cadastroID;
 	}
 
 	/**
@@ -326,6 +330,10 @@ public class Cenario {
 	
 	public int getTotalApostas() {
 		return this.apostas.size();
+	}
+	
+	public int getCadastroID() {
+		return this.cadastroID;
 	}
 
 }

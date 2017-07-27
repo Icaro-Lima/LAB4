@@ -15,8 +15,8 @@ public class CenarioBonus extends Cenario {
 	 * @param descricao A descrição do cenário.
 	 * @param bonus O bônus a ser somado ao rateamento dos jogadores.
 	 */
-	public CenarioBonus(String descricao, int bonus) {
-		super(descricao);
+	public CenarioBonus(String descricao, int cadastroID, int bonus) {
+		super(descricao, cadastroID);
 
 		this.bonus = bonus;
 	}

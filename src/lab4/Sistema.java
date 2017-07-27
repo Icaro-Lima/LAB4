@@ -1,6 +1,7 @@
 package lab4;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import cenarios.Cenario;
 import cenarios.CenarioBonus;
@@ -59,7 +60,7 @@ public class Sistema {
 			throw new IllegalArgumentException("Erro no cadastro de cenario: Descricao nao pode ser vazia");
 		}
 
-		Cenario cenario = new Cenario(descricao);
+		Cenario cenario = new Cenario(descricao, this.cenariosOrdenadosPeloCadastro.size() + 1);
 
 		this.cenariosOrdenadosPeloCadastro.add(cenario);
 
@@ -82,7 +83,7 @@ public class Sistema {
 			throw new IllegalArgumentException("Erro no cadastro de cenario: Bonus invalido");
 		}
 
-		CenarioBonus cenarioBonus = new CenarioBonus(descricao, bonus);
+		CenarioBonus cenarioBonus = new CenarioBonus(descricao, this.cenariosOrdenadosPeloCadastro.size() + 1, bonus);
 
 		this.cenariosOrdenadosPeloCadastro.add(cenarioBonus);
 
@@ -355,9 +356,21 @@ public class Sistema {
 	 *            O identificador do cenário na nova ordem.
 	 * @return Retorna uma String representando a exibição do cenário.
 	 */
-	//String exibirCenarioOrdenado(int cenarioID) {
-	//	
-	//}
+	String exibirCenarioOrdenado(int cenarioID) {
+		if (this.ordem.equals("Cadastro")) {
+			return cenarioID + " - " + this.pegaCenario(cenarioID).toString();
+		} else {
+			ArrayList<Cenario> listaOrdenada = new ArrayList<Cenario>(this.cenariosOrdenadosPeloCadastro);
+			
+			if (this.ordem.equals("Nome")) {
+				Collections.sort(listaOrdenada, new NomeComparator());
+			} else {
+				Collections.sort(listaOrdenada, new ApostasComparator());
+			}
+			
+			return cenarioID + " - " + listaOrdenada.get(cenarioID - 1);
+		}
+	}
 
 	/**
 	 * Retorna o caixa de um determinado cenário.
