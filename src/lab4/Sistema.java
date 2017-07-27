@@ -1,6 +1,6 @@
 package lab4;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import cenarios.Cenario;
 import cenarios.CenarioBonus;
@@ -20,7 +20,9 @@ public class Sistema {
 	private int caixa;
 	private double taxa;
 
-	private HashMap<Integer, Cenario> cenarios;
+	private String ordem;
+
+	private ArrayList<Cenario> cenariosOrdenadosPeloCadastro;
 
 	/**
 	 * Instancia um novo sistema.
@@ -32,17 +34,17 @@ public class Sistema {
 	 */
 	public Sistema(int caixa, double taxa) {
 		if (caixa < 0) {
-			throw new IllegalArgumentException(
-					"Erro na inicializacao: Caixa nao pode ser inferior a 0");
+			throw new IllegalArgumentException("Erro na inicializacao: Caixa nao pode ser inferior a 0");
 		} else if (taxa < 0) {
-			throw new IllegalArgumentException(
-					"Erro na inicializacao: Taxa nao pode ser inferior a 0");
+			throw new IllegalArgumentException("Erro na inicializacao: Taxa nao pode ser inferior a 0");
 		}
 
 		this.caixa = caixa;
 		this.taxa = taxa;
 
-		this.cenarios = new HashMap<Integer, Cenario>();
+		this.ordem = "Cadastro";
+
+		this.cenariosOrdenadosPeloCadastro = new ArrayList<>();
 	}
 
 	/**
@@ -54,15 +56,14 @@ public class Sistema {
 	 */
 	public int cadastrarCenario(String descricao) {
 		if (descricao.trim().isEmpty()) {
-			throw new IllegalArgumentException(
-					"Erro no cadastro de cenario: Descricao nao pode ser vazia");
+			throw new IllegalArgumentException("Erro no cadastro de cenario: Descricao nao pode ser vazia");
 		}
 
 		Cenario cenario = new Cenario(descricao);
 
-		this.cenarios.put(this.cenarios.size() + 1, cenario);
+		this.cenariosOrdenadosPeloCadastro.add(cenario);
 
-		return this.cenarios.size();
+		return this.cenariosOrdenadosPeloCadastro.size();
 	}
 
 	/**
@@ -76,55 +77,18 @@ public class Sistema {
 	 */
 	public int cadastrarCenario(String descricao, int bonus) {
 		if (descricao.trim().isEmpty()) {
-			throw new IllegalArgumentException(
-					"Erro no cadastro de cenario: Descricao nao pode ser vazia");
+			throw new IllegalArgumentException("Erro no cadastro de cenario: Descricao nao pode ser vazia");
 		} else if (bonus <= 0) {
-			throw new IllegalArgumentException(
-					"Erro no cadastro de cenario: Bonus invalido");
+			throw new IllegalArgumentException("Erro no cadastro de cenario: Bonus invalido");
 		}
 
 		CenarioBonus cenarioBonus = new CenarioBonus(descricao, bonus);
 
-		this.cenarios.put(this.cenarios.size() + 1, cenarioBonus);
+		this.cenariosOrdenadosPeloCadastro.add(cenarioBonus);
 
 		this.caixa -= bonus;
 
-		return this.cenarios.size();
-	}
-
-	/**
-	 * Retorna a representação textual do cenário dado.
-	 * 
-	 * @param cenarioID
-	 *            O ID do cenário.
-	 * @return Retorna uma String representando um cenário.
-	 */
-	public String exibirCenario(int cenarioID) {
-		if (cenarioID <= 0) {
-			throw new IllegalArgumentException(
-					"Erro na consulta de cenario: Cenario invalido");
-		} else if (!this.contemCenario(cenarioID)) {
-			throw new NullPointerException(
-					"Erro na consulta de cenario: Cenario nao cadastrado");
-		}
-
-		return cenarioID + " - " + this.cenarios.get(cenarioID).toString();
-	}
-
-	/**
-	 * Retorna a representação em String de todos os cenários do sistema, um por
-	 * linha.
-	 * 
-	 * @return Uma String representando todos os cenários do sistema.
-	 */
-	public String exibirCenarios() {
-		String texto = "";
-		for (int i = 1; i <= this.cenarios.size(); i++) {
-			texto += i + " - " + this.cenarios.get(i).toString()
-					+ LINE_SEPARATOR;
-		}
-
-		return texto;
+		return this.cenariosOrdenadosPeloCadastro.size();
 	}
 
 	/**
@@ -136,7 +100,50 @@ public class Sistema {
 	 *         contrário.
 	 */
 	private boolean contemCenario(int cenarioID) {
-		return this.cenarios.keySet().contains(cenarioID);
+		return cenarioID >= 1 && this.cenariosOrdenadosPeloCadastro.size() >= cenarioID;
+	}
+	
+	/**
+	 * Retorna um objeto Cenario a partir do seu ID.
+	 * 
+	 * @param cenarioID
+	 *            O identificador do cenário.
+	 * @return Um objeto Cenario.
+	 */
+	private Cenario pegaCenario(int cenarioID) {
+		return this.cenariosOrdenadosPeloCadastro.get(cenarioID - 1);
+	}
+
+	/**
+	 * Retorna a representação textual do cenário dado.
+	 * 
+	 * @param cenarioID
+	 *            O ID do cenário.
+	 * @return Retorna uma String representando um cenário.
+	 */
+	public String exibirCenario(int cenarioID) {
+		if (cenarioID <= 0) {
+			throw new IllegalArgumentException("Erro na consulta de cenario: Cenario invalido");
+		} else if (!this.contemCenario(cenarioID)) {
+			throw new NullPointerException("Erro na consulta de cenario: Cenario nao cadastrado");
+		}
+
+		return cenarioID + " - " + this.pegaCenario(cenarioID).toString();
+	}
+
+	/**
+	 * Retorna a representação em String de todos os cenários do sistema, um por
+	 * linha.
+	 * 
+	 * @return Uma String representando todos os cenários do sistema.
+	 */
+	public String exibirCenarios() {
+		String texto = "";
+		for (int i = 0; i < this.cenariosOrdenadosPeloCadastro.size(); i++) {
+			texto += i + " - " + this.cenariosOrdenadosPeloCadastro.get(i).toString() + LINE_SEPARATOR;
+		}
+
+		return texto;
 	}
 
 	/**
@@ -157,17 +164,14 @@ public class Sistema {
 	 * @param previsao
 	 *            A previsão do apostador.
 	 */
-	public void cadastrarAposta(int cenarioID, String apostador, int valor,
-			String previsao) {
+	public void cadastrarAposta(int cenarioID, String apostador, int valor, String previsao) {
 		if (cenarioID <= 0) {
-			throw new IllegalArgumentException(
-					"Erro no cadastro de aposta: Cenario invalido");
+			throw new IllegalArgumentException("Erro no cadastro de aposta: Cenario invalido");
 		} else if (!this.contemCenario(cenarioID)) {
-			throw new NullPointerException(
-					"Erro no cadastro de aposta: Cenario nao cadastrado");
+			throw new NullPointerException("Erro no cadastro de aposta: Cenario nao cadastrado");
 		}
 
-		Cenario cenario = this.cenarios.get(cenarioID);
+		Cenario cenario = this.pegaCenario(cenarioID);
 		cenario.cadastraAposta(apostador, valor, previsao);
 	}
 
@@ -181,26 +185,24 @@ public class Sistema {
 	 * @param valor
 	 *            O valor da aposta.
 	 * @param previsao
-	 *            A previsão do apostador, podendo ser: "VAI ACONTECER" e
-	 *            "N VAI ACONTECER".
+	 *            A previsão do apostador, podendo ser: "VAI ACONTECER" e "N VAI
+	 *            ACONTECER".
 	 * @param valorSeguro
 	 *            O valor do seguro.
 	 * @param custoSeguro
 	 *            O custo do seguro.
 	 * @return Retorna o identificador da aposta que foi cadastrada.
 	 */
-	public int cadastrarApostaSeguraValor(int cenarioID, String apostador,
-			int valor, String previsao, int valorSeguro, int custoSeguro) {
+	public int cadastrarApostaSeguraValor(int cenarioID, String apostador, int valor, String previsao, int valorSeguro,
+			int custoSeguro) {
 		if (cenarioID <= 0) {
-			throw new IllegalArgumentException(
-					"Erro no cadastro de aposta assegurada por valor: Cenario invalido");
+			throw new IllegalArgumentException("Erro no cadastro de aposta assegurada por valor: Cenario invalido");
 		}
 
 		this.caixa += custoSeguro;
 
-		Cenario cenario = this.cenarios.get(cenarioID);
-		return cenario.cadastrarApostaSeguraValor(apostador, valor, previsao,
-				valorSeguro);
+		Cenario cenario = this.pegaCenario(cenarioID);
+		return cenario.cadastrarApostaSeguraValor(apostador, valor, previsao, valorSeguro);
 	}
 
 	/**
@@ -214,25 +216,23 @@ public class Sistema {
 	 * @param valor
 	 *            O valor da aposta.
 	 * @param previsao
-	 *            A previsão do apostador, podendo ser: "VAI ACONTECER" e
-	 *            "N VAI ACONTECER".
+	 *            A previsão do apostador, podendo ser: "VAI ACONTECER" e "N VAI
+	 *            ACONTECER".
 	 * @param taxaSeguro
 	 *            A taxa do seguro.
 	 * @param custoSeguro
 	 *            O custo do seguro.
 	 * @return Retorna o identificador da aposta que foi cadastrada.
 	 */
-	public int cadastrarApostaSeguraTaxa(int cenarioID, String apostador,
-			int valor, String previsao, double taxaSeguro, int custoSeguro) {
+	public int cadastrarApostaSeguraTaxa(int cenarioID, String apostador, int valor, String previsao, double taxaSeguro,
+			int custoSeguro) {
 		if (cenarioID <= 0) {
-			throw new IllegalArgumentException(
-					"Erro no cadastro de aposta assegurada por taxa: Cenario invalido");
+			throw new IllegalArgumentException("Erro no cadastro de aposta assegurada por taxa: Cenario invalido");
 		}
 		this.caixa += custoSeguro;
 
-		Cenario cenario = this.cenarios.get(cenarioID);
-		return cenario.cadastrarApostaSeguraTaxa(apostador, valor, previsao,
-				taxaSeguro);
+		Cenario cenario = this.pegaCenario(cenarioID);
+		return cenario.cadastrarApostaSeguraTaxa(apostador, valor, previsao, taxaSeguro);
 	}
 
 	/**
@@ -245,9 +245,8 @@ public class Sistema {
 	 * @param seguroValor
 	 *            O valor do seguro.
 	 */
-	public void alterarSeguroValor(int cenarioID, int apostaAssegurada,
-			int seguroValor) {
-		Cenario cenario = this.cenarios.get(cenarioID);
+	public void alterarSeguroValor(int cenarioID, int apostaAssegurada, int seguroValor) {
+		Cenario cenario = this.pegaCenario(cenarioID);
 		cenario.alterarSeguroValor(apostaAssegurada, seguroValor);
 	}
 
@@ -261,9 +260,8 @@ public class Sistema {
 	 * @param seguroTaxa
 	 *            A taxa do seguro.
 	 */
-	public void alterarSeguroTaxa(int cenarioID, int apostaAssegurada,
-			double seguroTaxa) {
-		Cenario cenario = this.cenarios.get(cenarioID);
+	public void alterarSeguroTaxa(int cenarioID, int apostaAssegurada, double seguroTaxa) {
+		Cenario cenario = this.pegaCenario(cenarioID);
 		cenario.alterarSeguroTaxa(apostaAssegurada, seguroTaxa);
 	}
 
@@ -277,14 +275,12 @@ public class Sistema {
 	 */
 	public int valorTotalDeApostas(int cenarioID) {
 		if (cenarioID <= 0) {
-			throw new IllegalArgumentException(
-					"Erro na consulta do valor total de apostas: Cenario invalido");
+			throw new IllegalArgumentException("Erro na consulta do valor total de apostas: Cenario invalido");
 		} else if (!this.contemCenario(cenarioID)) {
-			throw new NullPointerException(
-					"Erro na consulta do valor total de apostas: Cenario nao cadastrado");
+			throw new NullPointerException("Erro na consulta do valor total de apostas: Cenario nao cadastrado");
 		}
 
-		return this.cenarios.get(cenarioID).valorTotalDeApostas();
+		return this.pegaCenario(cenarioID).valorTotalDeApostas();
 	}
 
 	/**
@@ -297,14 +293,12 @@ public class Sistema {
 	 */
 	public int totalDeApostas(int cenarioID) {
 		if (cenarioID <= 0) {
-			throw new IllegalArgumentException(
-					"Erro na consulta do total de apostas: Cenario invalido");
+			throw new IllegalArgumentException("Erro na consulta do total de apostas: Cenario invalido");
 		} else if (!this.contemCenario(cenarioID)) {
-			throw new NullPointerException(
-					"Erro na consulta do total de apostas: Cenario nao cadastrado");
+			throw new NullPointerException("Erro na consulta do total de apostas: Cenario nao cadastrado");
 		}
 
-		return this.cenarios.get(cenarioID).totalDeApostas();
+		return this.pegaCenario(cenarioID).totalDeApostas();
 	}
 
 	/**
@@ -316,7 +310,7 @@ public class Sistema {
 	 * @return Uma String representando todas as apostas, uma por linha.
 	 */
 	public String exibeApostas(int cenarioID) {
-		return this.cenarios.get(cenarioID).exibeApostas();
+		return this.pegaCenario(cenarioID).exibeApostas();
 	}
 
 	/**
@@ -330,28 +324,40 @@ public class Sistema {
 	 */
 	public void fecharAposta(int cenarioID, boolean ocorreu) {
 		if (cenarioID <= 0) {
-			throw new IllegalArgumentException(
-					"Erro ao fechar aposta: Cenario invalido");
+			throw new IllegalArgumentException("Erro ao fechar aposta: Cenario invalido");
 		} else if (!this.contemCenario(cenarioID)) {
-			throw new NullPointerException(
-					"Erro ao fechar aposta: Cenario nao cadastrado");
+			throw new NullPointerException("Erro ao fechar aposta: Cenario nao cadastrado");
 		}
 
-		Cenario cenario = this.cenarios.get(cenarioID);
+		Cenario cenario = this.pegaCenario(cenarioID);
 
 		cenario.fecharAposta(ocorreu, taxa);
 
 		this.caixa += cenario.getCaixaCenario();
 		this.caixa -= cenario.getTotalValorAssegurado();
 	}
-	
+
+	/**
+	 * Determina uma ordem para o método exibirCenarioOrdenado.
+	 * 
+	 * @param ordem
+	 *            A ordem na qual os cenários devem ser ordenados (Cadastro,
+	 *            Nome, Apostas).
+	 */
 	public void alterarOrdem(String ordem) {
-		this.cenarios.alterarOrdem(ordem);
+		this.ordem = ordem;
 	}
-	
-	String exibirCenarioOrdenado(int cenario) {
-		return this.cenarios.get(cenario).exibirCenarioOrdenado();
-	}
+
+	/**
+	 * Exibe um cenário em uma ordem pré-definida pelo método alterarOrdem.
+	 * 
+	 * @param cenario
+	 *            O identificador do cenário na nova ordem.
+	 * @return Retorna uma String representando a exibição do cenário.
+	 */
+	//String exibirCenarioOrdenado(int cenarioID) {
+	//	
+	//}
 
 	/**
 	 * Retorna o caixa de um determinado cenário.
@@ -363,14 +369,12 @@ public class Sistema {
 	 */
 	public int getCaixaCenario(int cenarioID) {
 		if (cenarioID <= 0) {
-			throw new IllegalArgumentException(
-					"Erro na consulta do caixa do cenario: Cenario invalido");
+			throw new IllegalArgumentException("Erro na consulta do caixa do cenario: Cenario invalido");
 		} else if (!this.contemCenario(cenarioID)) {
-			throw new NullPointerException(
-					"Erro na consulta do caixa do cenario: Cenario nao cadastrado");
+			throw new NullPointerException("Erro na consulta do caixa do cenario: Cenario nao cadastrado");
 		}
 
-		return this.cenarios.get(cenarioID).getCaixaCenario();
+		return this.pegaCenario(cenarioID).getCaixaCenario();
 	}
 
 	/**
@@ -383,14 +387,12 @@ public class Sistema {
 	 */
 	public int getTotalRateioCenario(int cenarioID) {
 		if (cenarioID <= 0) {
-			throw new IllegalArgumentException(
-					"Erro na consulta do total de rateio do cenario: Cenario invalido");
+			throw new IllegalArgumentException("Erro na consulta do total de rateio do cenario: Cenario invalido");
 		} else if (!this.contemCenario(cenarioID)) {
-			throw new NullPointerException(
-					"Erro na consulta do total de rateio do cenario: Cenario nao cadastrado");
+			throw new NullPointerException("Erro na consulta do total de rateio do cenario: Cenario nao cadastrado");
 		}
 
-		return this.cenarios.get(cenarioID).getTotalRateioCenario();
+		return this.pegaCenario(cenarioID).getTotalRateioCenario();
 	}
 
 	/**
@@ -410,7 +412,7 @@ public class Sistema {
 	 * @return Uma String representando o estado do cenário.
 	 */
 	public String getEstadoCenario(int cenarioID) {
-		return this.cenarios.get(cenarioID).getEstado();
+		return this.pegaCenario(cenarioID).getEstado();
 	}
 
 }

@@ -323,5 +323,9 @@ public class Cenario {
 	private void setTotalValorAssegurado(int totalValorAssegurado) {
 		this.totalValorAssegurado = totalValorAssegurado;
 	}
+	
+	public int getTotalApostas() {
+		return this.apostas.size();
+	}
 
 }
