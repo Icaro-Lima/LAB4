@@ -284,6 +284,7 @@ public class Cenario {
 
 			this.setTotalRateioCenario(rateioBase);
 		} else {
+			this.setCaixaCenario((int)(sum * taxa));
 			this.setTotalRateioCenario(0);
 		}
 	}

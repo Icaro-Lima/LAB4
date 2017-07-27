@@ -141,7 +141,7 @@ public class Sistema {
 	public String exibirCenarios() {
 		String texto = "";
 		for (int i = 0; i < this.cenariosOrdenadosPeloCadastro.size(); i++) {
-			texto += i + " - " + this.cenariosOrdenadosPeloCadastro.get(i).toString() + LINE_SEPARATOR;
+			texto += (i + 1) + " - " + this.cenariosOrdenadosPeloCadastro.get(i).toString() + LINE_SEPARATOR;
 		}
 
 		return texto;
@@ -356,7 +356,7 @@ public class Sistema {
 	 *            O identificador do cenário na nova ordem.
 	 * @return Retorna uma String representando a exibição do cenário.
 	 */
-	String exibirCenarioOrdenado(int cenarioID) {
+	public String exibirCenarioOrdenado(int cenarioID) {
 		if (this.ordem.equals("Cadastro")) {
 			return cenarioID + " - " + this.pegaCenario(cenarioID).toString();
 		} else {
